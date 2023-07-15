@@ -36,7 +36,7 @@ static void print_directory_tree(DeprecatedString const& root_path, int depth, D
         } else {
             root_indent_string = "";
         }
-        out("{}|-- ", root_indent_string);
+        out("{}├── ", root_indent_string);
     }
 
     DeprecatedString root_dir_name = LexicalPath::basename(root_path);
@@ -90,6 +90,7 @@ static void print_directory_tree(DeprecatedString const& root_path, int depth, D
             if (at_last_entry) {
                 new_indent_string = DeprecatedString::formatted("{}    ", indent_string);
             } else {
+                // FIXME: USE BOX DRAWING CHARACTER HERE
                 new_indent_string = DeprecatedString::formatted("{}|   ", indent_string);
             }
 
@@ -97,7 +98,7 @@ static void print_directory_tree(DeprecatedString const& root_path, int depth, D
         } else if (!flag_show_only_directories) {
             g_files_seen++;
 
-            outln("{}|-- {}", indent_string, name);
+            outln("{}├── {}", indent_string, name);
         }
     }
 }
@@ -122,11 +123,11 @@ ErrorOr<int> serenity_main(Main::Arguments arguments)
 
     if (directories.is_empty()) {
         print_directory_tree(".", 0, "");
-        puts("");
+        outln("");
     } else {
         for (auto const& directory : directories) {
             print_directory_tree(directory, 0, "");
-            puts("");
+            outln("");
         }
     }
 
